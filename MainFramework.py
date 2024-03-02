@@ -27,10 +27,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        #self.model = vl.VersionListModel()
         self.model = vl.VersionListModel(versions=ver_release)
         self.load()
-        self.releaseListView.setModel(self.model)
+        self.verListView.setModel(self.model)
 
         # Connect the button.
         self.addButton.pressed.connect(self.add)
@@ -53,7 +52,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.save()
 
     def delete(self):
-        indexes = self.releaseListView.selectedIndexes()
+        indexes = self.verListView.selectedIndexes()
         if indexes:
             # Indexes is a list of a single item in single-select mode.
             index = indexes[0]
@@ -61,11 +60,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             del self.model.versions[index.row()]
             self.model.layoutChanged.emit()
             # Clear the selection (as it is no longer valid).
-            self.releaseListView.clearSelection()
+            self.verListView.clearSelection()
             self.save()
 
     def complete(self):
-        indexes = self.releaseListView.selectedIndexes()
+        indexes = self.verListView.selectedIndexes()
         if indexes:
             index = indexes[0]
             row = index.row()
@@ -75,7 +74,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # for a single selection.
             self.model.dataChanged.emit(index, index)
             # Clear the selection (as it is no longer valid).
-            self.releaseListView.clearSelection()
+            self.verListView.clearSelection()
             self.save()
 
     def load(self):

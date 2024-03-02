@@ -11,12 +11,12 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Version Management</string>
+   <string>Mine Craft Version Management</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QListView" name="releaseListView">
+     <widget class="QListView" name="verListView">
       <property name="selectionMode">
        <enum>QAbstractItemView::SingleSelection</enum>
       </property>
