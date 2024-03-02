@@ -1,10 +1,6 @@
-import json, requests
+import requests, os, hashlib
+from tqdm import tqdm
 
 def get_version_list():
-    data = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').text
-    data_dict = json.loads(data)
+    data_dict = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').json()
     return data_dict
-
-version_dict = get_version_list()
-lastest_verson = version_dict['latest']['release']
-print(f'最新版本：{lastest_verson}')
