@@ -1,4 +1,3 @@
-from . import File, downloader
 from .Ultities import get_file
 
 import requests, os
@@ -14,16 +13,20 @@ import requests, os
 #     return sha1.hexdigest()
 
 def install_version(url, version_name):
+    from . import File, downloader
+
     print('Downloading json file...')
-    info_dict = get_file(url, 
-                         f'.minecraft/versions/{version_name}/{version_name}.json', 
-                         is_json=True)
+    json_file = File(url, 
+                     f'.minecraft/versions/{version_name}/{version_name}.json', 
+                     is_json=True)
+    info_dict = get_file(json_file)
 
     print('Downloading assets index file...')
     assets = info_dict['assets']
-    assets_index_file = get_file(info_dict['assetIndex']['url'],
-                           f'.minecraft/assets/indexes/{assets}.json', 
-                           is_json=True)
+    assets_file = File(info_dict['assetIndex']['url'],
+                       f'.minecraft/assets/indexes/{assets}.json', 
+                       is_json=True)
+    assets_index_file = get_file(assets_file)
 
     jar_file = File(info_dict['downloads']['client']['url'],
                     f'.minecraft/versions/{version_name}/{version_name}.jar')
@@ -40,5 +43,3 @@ def install_version(url, version_name):
         file_list.append(File(url, full_path))
 
     downloader(file_list)
-
-install_version('https://piston-meta.mojang.com/v1/packages/dc6fd93b4a4856000343557281a47c27192cdd3b/24w09a.json', 'aaa')

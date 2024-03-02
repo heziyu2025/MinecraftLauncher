@@ -1,6 +1,3 @@
-import requests, os, hashlib
-from tqdm import tqdm
+from Downloader import install_version
 
-def get_version_list():
-    data_dict = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').json()
-    return data_dict
+install_version('https://piston-meta.mojang.com/v1/packages/dc6fd93b4a4856000343557281a47c27192cdd3b/24w09a.json', 'aaa')
