@@ -41,4 +41,6 @@ class downloader:
             self.thread_list.append(thread)
             self.file_list.pop(0)
 
+def get_version_list():
+    return requests.get('https://launchermeta.mojang.com/mc/game/version_manifest.json').json()
     

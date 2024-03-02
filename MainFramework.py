@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
-import download
+import Downloader
 import VersionListModel as vl
 import json
 
@@ -9,7 +9,7 @@ import json
 import sys
 
 # get version data
-versions = download.get_version_list()
+versions = Downloader.get_version_list()
 ver_release = []
 ver_snapshot = []
 for v in versions["versions"]:
