@@ -1,11 +1,6 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import Qt
-from PyQt6 import uic
-import Downloader
-from gui import MainFramework as mf
-
-# Only needed for access to command line arguments
 import sys
+from PyQt6.QtWidgets import *
+from gui import MainFramework as mf
 
 app = QApplication(sys.argv)
 window = mf.MainWindow()

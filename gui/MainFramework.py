@@ -16,12 +16,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         QMainWindow.__init__(self)                
         Ui_MainWindow.__init__(self)
-        self.setupUi(self)
+        self.setupUi(self) 
 
-        # Connect the button.
-        self.addButton.pressed.connect(self.add)
-        self.deleteButton.pressed.connect(self.delete)
-        self.completeButton.pressed.connect(self.complete)
+        # create a layout for central widget
+        self.centralLayout = QVBoxLayout()
+        self.centralwidget.setLayout(self.centralLayout)
+
+        # # Connect the button.
+        # self.addButton.pressed.connect(self.add)
+        # self.deleteButton.pressed.connect(self.delete)
+        # self.completeButton.pressed.connect(self.complete)       
+        
+        self.currVerLayout = QHBoxLayout()
+        self.currVerLayout.addWidget(QLabel("Current Version: "))
+        self.lblCurrVer = QLabel("1.2.1.1")
+        self.currVerLayout.addWidget(self.lblCurrVer)
+        self.centralLayout.addLayout(self.currVerLayout)    
+        
+        self.otherVerLayout = QHBoxLayout()
+        self.otherVerLayout.addWidget(QLabel("Other Versions: "))
+        self.btnOtherVer = QPushButton("Load other versions")
+        self.btnOtherVer.pressed.connect(self.fetchVers)     
+        self.otherVerLayout.addWidget(self.btnOtherVer)
+        self.centralLayout.addLayout(self.otherVerLayout)
+
+        self.verListView = QListView()
+        self.centralLayout.addWidget(self.verListView)
 
         # get version data
         versions = Downloader.get_version_list()
@@ -34,8 +54,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 ver_others.append(var)
                 
+        #self.load()
         self.model = vl.VersionListModel(versions=ver_release)
-        self.load()
         self.verListView.setModel(self.model)
 
     def add(self):
@@ -78,6 +98,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Clear the selection (as it is no longer valid).
             self.verListView.clearSelection()
             self.save()
+
+    def fetchVers(self):
+        try:
+            with open('data.db', 'r') as f:
+                self.model.versions = json.load(f)
+        except Exception:
+            pass
 
     def load(self):
         try:
