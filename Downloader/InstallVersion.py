@@ -1,7 +1,5 @@
 from .Ultities import get_file
 
-import requests, os
-
 def install_version(url, version_name):
     from . import File, downloader
 

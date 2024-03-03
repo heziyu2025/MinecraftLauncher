@@ -1,6 +1,4 @@
-import threading, os, requests
-from time import sleep
-#from tqdm import tqdm
+import threading, requests
 
 from .InstallVersion import install_version
 from.Ultities import get_file
