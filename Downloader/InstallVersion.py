@@ -17,17 +17,17 @@ def install_version(url, version_name):
                        sha1=info_dict['assetIndex']['sha1'])
     assets_index_file = get_file(assets_file)
 
+    
     jar_file = File(info_dict['downloads']['client']['url'],
-                    f'.minecraft/versions/{version_name}/{version_name}.jar')
+                    f'.minecraft/versions/{version_name}/{version_name}.jar',
+                    sha1=info_dict['downloads']['client']['sha1'])
     
     file_list = [jar_file]
 
     for lib in info_dict['libraries']:
-        # if os.path.exists(lib['downloads']['artifact']['path']) and calculate_sha1(lib['downloads']['artifact']['path']) == lib['downloads']['artifact']['hash']:
-        #     continue
-
         path = lib['downloads']['artifact']['path']
         full_path = f'.minecraft/libraries/{path}'
+        
         url = lib['downloads']['artifact']['url']
         sha1 = lib['downloads']['artifact']['sha1']
         file_list.append(File(url, full_path, sha1))
