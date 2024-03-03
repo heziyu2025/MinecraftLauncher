@@ -1,22 +1,12 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
+from . import VersionListModel as vl
 import Downloader
-import VersionListModel as vl
 import json
 
 # Only needed for access to command line arguments
 import sys
-
-# get version data
-versions = Downloader.get_version_list()
-ver_release = []
-ver_snapshot = []
-for v in versions["versions"]:
-    if v["type"] == "release":
-        ver_release.append(v)
-    if v["type"] == "snapshot":
-        ver_snapshot.append(v)
 
 # load UI
 ui_file = "gui/mainwindow.ui"
@@ -24,17 +14,29 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(ui_file)
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
-        QMainWindow.__init__(self)
+        QMainWindow.__init__(self)                
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        self.model = vl.VersionListModel(versions=ver_release)
-        self.load()
-        self.verListView.setModel(self.model)
 
         # Connect the button.
         self.addButton.pressed.connect(self.add)
         self.deleteButton.pressed.connect(self.delete)
         self.completeButton.pressed.connect(self.complete)
+
+        # get version data
+        versions = Downloader.get_version_list()
+        ver_release = []
+        ver_others = []
+        for v in versions["versions"]:
+            var={v["id"], v["type"], v["releaseTime"]}
+            if v["type"] == "release":
+                ver_release.append(var)
+            else:
+                ver_others.append(var)
+                
+        self.model = vl.VersionListModel(versions=ver_release)
+        self.load()
+        self.verListView.setModel(self.model)
 
     def add(self):
         """
@@ -87,8 +89,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def save(self):
         with open('data.db', 'w') as f:
             data = json.dump(self.model.versions, f)
-
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec()
