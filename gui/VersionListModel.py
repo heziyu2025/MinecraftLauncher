@@ -10,13 +10,13 @@ class VersionListModel(QtCore.QAbstractListModel):
 
     def data(self, index, role):
         if role == Qt.ItemDataRole.DisplayRole:
-            id, type, url, time, releaseTime = self.versions[index.row()]
-            return type
+            id, type, releaseTime = self.versions[index.row()]
+            return id#, type, releaseTime
 
         if role == Qt.ItemDataRole.DecorationRole:
-            id, type, url, time, releaseTime = self.versions[index.row()]
+            id, type, releaseTime = self.versions[index.row()]
             if id:
-                return tick
+                return id#, type, releaseTime
 
     def rowCount(self, index):
         return len(self.versions)
