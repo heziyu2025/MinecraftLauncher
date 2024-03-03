@@ -16,8 +16,8 @@ class downloader:
 
         if len(self.file_list) != 0:
             new_file = self.file_list[0]
-            self.file_list.pop()
-
+            self.file_list.pop(0)
+ 
             self.thread_list.remove(old_thread)
 
             new_thread = threading.Thread(target=self.get_file_thread, args=((new_file,)))
