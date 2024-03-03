@@ -42,20 +42,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.verListView = QListView()
         self.centralLayout.addWidget(self.verListView)
-
-        # get version data
-        versions = Downloader.get_version_list()
-        ver_release = []
-        ver_others = []
-        for v in versions["versions"]:
-            var={v["id"], v["type"], v["releaseTime"]}
-            if v["type"] == "release":
-                ver_release.append(var)
-            else:
-                ver_others.append(var)
                 
         #self.load()
-        self.model = vl.VersionListModel(versions=ver_release)
+        self.model = vl.VersionListModel()
         self.verListView.setModel(self.model)
 
     def add(self):
@@ -101,8 +90,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def fetchVers(self):
         try:
-            with open('data.db', 'r') as f:
-                self.model.versions = json.load(f)
+            # get version data
+            versions = Downloader.get_version_list()
+            ver_release = []
+            ver_others = []
+            for v in versions["versions"]:
+                var={v["id"], v["type"], v["releaseTime"]}
+                if v["type"] == "release":
+                    ver_release.append(var)
+                else:
+                    ver_others.append(var)
+                    
+            #self.load()
+            self.model = vl.VersionListModel(versions=ver_release)
+            self.verListView.setModel(self.model)
         except Exception:
             pass
 
