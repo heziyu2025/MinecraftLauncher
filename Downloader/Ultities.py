@@ -1,4 +1,4 @@
-import os, requests, hashlib
+import os, requests, hashlib, platform
 
 def calculate_sha1(file_path):
     sha1 = hashlib.sha1()
@@ -26,3 +26,19 @@ def get_file(file):
 
         if file.is_json:
             return requests.get(file.url).json()
+        
+def check_rules(rules: list):
+    system_name = platform.system()
+    system_version = platform.version()
+
+    for rule in rules:
+        action = rule.get('action', 'allow')
+        os_name = rule.get('os', {}).get('name', None)
+        os_version = rule.get('os', {}).get('version', None)
+
+        if os_name is None or os_name.lower() == system_name.lower():
+            if os_version is None or os_version == '' or os_version.lower() in system_version.lower():
+                valid = action == 'allow'
+                break
+    
+    return valid

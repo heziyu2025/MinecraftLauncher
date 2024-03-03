@@ -1,15 +1,13 @@
-from .Ultities import get_file
+from .Ultities import get_file, check_rules
 
 def install_version(url, version_name):
     from . import File, downloader
 
-    print('Downloading json file...')
     json_file = File(url, 
                      f'.minecraft/versions/{version_name}/{version_name}.json', 
                      is_json=True)
     info_dict = get_file(json_file)
 
-    print('Downloading assets index file...')
     assets = info_dict['assets']
     assets_file = File(info_dict['assetIndex']['url'],
                        f'.minecraft/assets/indexes/{assets}.json', 
@@ -25,11 +23,12 @@ def install_version(url, version_name):
     file_list = [jar_file]
 
     for lib in info_dict['libraries']:
-        path = lib['downloads']['artifact']['path']
-        full_path = f'.minecraft/libraries/{path}'
-        
-        url = lib['downloads']['artifact']['url']
-        sha1 = lib['downloads']['artifact']['sha1']
-        file_list.append(File(url, full_path, sha1))
+        if check_rules(lib['rules']):
+            path = lib['downloads']['artifact']['path']
+            full_path = f'.minecraft/libraries/{path}'
+            
+            url = lib['downloads']['artifact']['url']
+            sha1 = lib['downloads']['artifact']['sha1']
+            file_list.append(File(url, full_path, sha1))
 
     downloader(file_list)
