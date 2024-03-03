@@ -2,16 +2,6 @@ from .Ultities import get_file
 
 import requests, os
 
-# def calculate_sha1(file_path):
-#     sha1 = hashlib.sha1()
-#     with open(file_path, "rb") as f:
-#         while True:
-#             data = f.read(65536)  # 64KB buffer
-#             if not data:
-#                 break
-#             sha1.update(data)
-#     return sha1.hexdigest()
-
 def install_version(url, version_name):
     from . import File, downloader
 
@@ -25,7 +15,8 @@ def install_version(url, version_name):
     assets = info_dict['assets']
     assets_file = File(info_dict['assetIndex']['url'],
                        f'.minecraft/assets/indexes/{assets}.json', 
-                       is_json=True)
+                       is_json=True,
+                       sha1=info_dict['assetIndex']['sha1'])
     assets_index_file = get_file(assets_file)
 
     jar_file = File(info_dict['downloads']['client']['url'],
@@ -40,6 +31,7 @@ def install_version(url, version_name):
         path = lib['downloads']['artifact']['path']
         full_path = f'.minecraft/libraries/{path}'
         url = lib['downloads']['artifact']['url']
-        file_list.append(File(url, full_path))
+        sha1 = lib['downloads']['artifact']['sha1']
+        file_list.append(File(url, full_path, sha1))
 
     downloader(file_list)
